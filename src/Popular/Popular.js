@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
-import MovieCard from '../movie-card/movie-card';
+import MovieCard from '../MovieCard/MovieCard';
 
 const API_KEY = 'bebd61ac069805fc5f54de2f0e6b838e';
 
