@@ -1,8 +1,7 @@
 import React from 'react';
 import { Box, Grid } from '@mui/material';
 import MovieCard from '../MovieCard/MovieCard';
-
-const API_KEY = 'bebd61ac069805fc5f54de2f0e6b838e';
+import { API_KEY, API_PATH } from '../environments';
 
 class Popular extends React.Component {
   constructor(props) {
@@ -11,7 +10,7 @@ class Popular extends React.Component {
   }
 
   async componentDidMount() {
-    const url = new URL('https://api.themoviedb.org/3/movie/popular');
+    const url = new URL(`${API_PATH}/popular`);
     url.searchParams.append('api_key', API_KEY);
 
     const res = await fetch(url.toString());

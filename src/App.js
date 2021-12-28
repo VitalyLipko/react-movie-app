@@ -6,12 +6,14 @@ import {
   Navigate,
 } from 'react-router-dom';
 import Popular from './Popular/Popular';
+import Movie from './Movie/Movie';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route exact path="/" element={<Popular />} />
+        <Route path="movies/:id" element={<Movie />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
