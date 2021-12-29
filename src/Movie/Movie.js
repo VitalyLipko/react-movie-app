@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API_KEY, API_PATH } from '../environments';
@@ -16,7 +16,6 @@ function Movie() {
       const res = await fetch(url.toString());
       const payload = await res.json();
       setMovie(payload);
-      console.log(payload);
     })();
   }, [params.id]);
 
@@ -37,7 +36,6 @@ function Movie() {
           >
             {movie.title}
           </Typography>
-          <Box></Box>
         </Grid>
         <Grid item>
           <Typography>{movie.overview}</Typography>
