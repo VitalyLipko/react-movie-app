@@ -12,8 +12,12 @@ export default function Layout() {
           <Typography className="Layout-toolbar-app-name" variant="h6">
             Movie App
           </Typography>
-          <nav>
-            <NavButton link="" label="Popular" />
+          <nav className="Layout-toolbar-navigation">
+            <ul>
+              <li>
+                <NavButton link="" label="Popular" />
+              </li>
+            </ul>
           </nav>
         </Toolbar>
       </AppBar>
