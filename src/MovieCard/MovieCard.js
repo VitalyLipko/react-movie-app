@@ -16,7 +16,7 @@ function MovieCard(props) {
   const cssProps = { height: Math.round(ASPECT_RATIO * size), width: size };
   return (
     <Card sx={cssProps}>
-      <CardActionArea LinkComponent={Link} to={`movies/${props.movie.id}`}>
+      <CardActionArea LinkComponent={Link} to={`/movies/${props.movie.id}`}>
         <CardMedia
           component="img"
           height="204"

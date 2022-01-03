@@ -6,10 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { BrowserRouter } from 'react-router-dom';
+import ScrollRestoration from './ScrollRestoration/ScrollRestoration';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
+      <ScrollRestoration />
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
