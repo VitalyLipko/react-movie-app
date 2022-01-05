@@ -31,6 +31,10 @@
   font-style: italic;
 }
 
+.MuiGrid-item.Movie-main-info-container-header-favorite-action {
+  margin: auto 0 24px auto;
+}
+
 .Movie-additional-info {
   padding: 16px 0 0 16px;
 }

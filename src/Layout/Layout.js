@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import NavButton from '../NavButton/NavButton';
 import React, { Fragment } from 'react';
@@ -17,12 +17,17 @@ export default function Layout() {
               <li>
                 <NavButton link="" label="Popular" />
               </li>
+              <li>
+                <NavButton link="favorites" label="Favorites" />
+              </li>
             </ul>
           </nav>
         </Toolbar>
       </AppBar>
       <Toolbar />
-      <Outlet />
+      <Grid container>
+        <Outlet />
+      </Grid>
     </Fragment>
   );
 }

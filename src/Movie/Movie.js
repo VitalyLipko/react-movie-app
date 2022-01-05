@@ -1,15 +1,20 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { API_KEY, API_PATH } from '../environments';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../environments';
 import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
 import MovieCard from '../MovieCard/MovieCard';
+import FavoriteAction from '../FavoriteAction/FavoriteAction';
 
 function Movie() {
   const params = useParams();
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [favoritesIds, setFavoritesIds] = useState(
+    JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
+  );
+  const isInitialRender = useRef(true);
   const background = () =>
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`;
   const voteBadgeColor = () => {
@@ -21,11 +26,14 @@ function Movie() {
     }
     return red[500];
   };
-  const recommendationsList = recommendations.map((recommendation) => (
-    <Grid item key={recommendation.id}>
-      <MovieCard movie={recommendation} />
-    </Grid>
-  ));
+
+  function onFavoriteStatusChange(id) {
+    setFavoritesIds(
+      favoritesIds.includes(id)
+        ? favoritesIds.filter((item) => item !== id)
+        : [...favoritesIds, id],
+    );
+  }
 
   useEffect(() => {
     (async function fetchMovie() {
@@ -35,7 +43,6 @@ function Movie() {
         `${API_PATH}/${params.id}/recommendations`,
       );
       recommendationsUrl.searchParams.append('api_key', API_KEY);
-
       const [movieRes, recommendationsRes] = await Promise.all([
         fetch(movieUrl.toString()),
         fetch(recommendationsUrl.toString()),
@@ -44,14 +51,41 @@ function Movie() {
         movieRes.json(),
         recommendationsRes.json(),
       ]);
-      setMovie(moviePayload);
-      setRecommendations(recommendationsPayload.results);
+
+      setMovie({
+        ...moviePayload,
+        isFavorite: favoritesIds.includes(moviePayload.id),
+      });
+      setRecommendations(
+        recommendationsPayload.results.map((recommendation) => ({
+          ...recommendation,
+          isFavorite: favoritesIds.includes(recommendation.id),
+        })),
+      );
     })();
   }, [params.id]);
 
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoritesIds));
+    setRecommendations((prevRecommendations) =>
+      prevRecommendations.map((recommendation) => ({
+        ...recommendation,
+        isFavorite: favoritesIds.includes(recommendation.id),
+      })),
+    );
+    setMovie((prevMovie) => ({
+      ...prevMovie,
+      isFavorite: favoritesIds.includes(prevMovie.id),
+    }));
+  }, [favoritesIds]);
+
   return (
     movie && (
-      <Grid container>
+      <Fragment>
         <Grid
           item
           className="Movie-backdrop-container"
@@ -96,6 +130,16 @@ function Movie() {
               {movie.tagline}
             </Typography>
           )}
+          <Grid
+            className="Movie-main-info-container-header-favorite-action"
+            item
+          >
+            <FavoriteAction
+              isButton={true}
+              isFavorite={movie.isFavorite}
+              onFavoriteStatusChange={() => onFavoriteStatusChange(movie.id)}
+            />
+          </Grid>
         </Grid>
         <Grid
           className="Movie-additional-info"
@@ -120,11 +164,18 @@ function Movie() {
               </Divider>
             </Grid>
             <Grid container item spacing={2} justifyContent="center">
-              {recommendationsList}
+              {recommendations.map((recommendation) => (
+                <Grid item key={recommendation.id}>
+                  <MovieCard
+                    movie={recommendation}
+                    onFavoriteStatusChange={onFavoriteStatusChange}
+                  />
+                </Grid>
+              ))}
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Fragment>
     )
   );
 }

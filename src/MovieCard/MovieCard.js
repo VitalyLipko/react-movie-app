@@ -1,7 +1,7 @@
-import React from 'react';
 import {
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardMedia,
   Tooltip,
@@ -9,11 +9,16 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './MovieCard.css';
+import FavoriteAction from '../FavoriteAction/FavoriteAction';
 
 function MovieCard(props) {
   const ASPECT_RATIO = 4 / 3;
-  const size = 200;
+  const size = 243;
   const cssProps = { height: Math.round(ASPECT_RATIO * size), width: size };
+
+  const onFavoriteStatusChange = () =>
+    props.onFavoriteStatusChange(props.movie.id);
+
   return (
     <Card sx={cssProps}>
       <CardActionArea LinkComponent={Link} to={`/movies/${props.movie.id}`}>
@@ -31,6 +36,12 @@ function MovieCard(props) {
           </Tooltip>
         </CardContent>
       </CardActionArea>
+      <CardActions>
+        <FavoriteAction
+          isFavorite={props.movie.isFavorite}
+          onFavoriteStatusChange={onFavoriteStatusChange}
+        />
+      </CardActions>
     </Card>
   );
 }
