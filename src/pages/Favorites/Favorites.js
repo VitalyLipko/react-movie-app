@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
+import { FAVORITES_STORAGE_KEY } from '../../environments';
 import { CircularProgress, Grid } from '@mui/material';
 import { MovieCard } from '../../components';
 import './Favorites.css';
+import { getMovie } from '../../adapters';
 
 export default function Favorites() {
-  const controller = new AbortController();
   const [favoritesIds, setFavoritesIds] = useState(
     JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
   );
@@ -13,16 +13,12 @@ export default function Favorites() {
   const isInitialRender = useRef(true);
 
   useEffect(() => {
+    const controller = new AbortController();
     (async function fetchData() {
       try {
         const res = await Promise.all(
           favoritesIds.map(async (favoriteId) => {
-            const url = new URL(`${API_PATH}/${favoriteId}`);
-            url.searchParams.append('api_key', API_KEY);
-            const payload = await fetch(url.toString(), {
-              signal: controller.signal,
-            });
-            const movie = await payload.json();
+            const movie = await getMovie(favoriteId, controller.signal);
             return { ...movie, isFavorite: true };
           }),
         );

@@ -1,13 +1,13 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
+import { FAVORITES_STORAGE_KEY } from '../../environments';
 import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
 import { FavoriteAction, MovieCard } from '../../components';
+import { getMovie, getRecommendations } from '../../adapters';
 
 function Movie() {
-  const controller = new AbortController();
   const params = useParams();
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
@@ -36,30 +36,20 @@ function Movie() {
   }
 
   useEffect(() => {
-    (async function fetchMovie() {
-      const movieUrl = new URL(`${API_PATH}/${params.id}`);
-      movieUrl.searchParams.append('api_key', API_KEY);
-      const recommendationsUrl = new URL(
-        `${API_PATH}/${params.id}/recommendations`,
-      );
-      recommendationsUrl.searchParams.append('api_key', API_KEY);
-
+    const controller = new AbortController();
+    (async function fetchData() {
       try {
         const [movieRes, recommendationsRes] = await Promise.all([
-          fetch(movieUrl.toString(), { signal: controller.signal }),
-          fetch(recommendationsUrl.toString(), { signal: controller.signal }),
-        ]);
-        const [moviePayload, recommendationsPayload] = await Promise.all([
-          movieRes.json(),
-          recommendationsRes.json(),
+          getMovie(params.id, controller.signal),
+          getRecommendations(params.id, controller.signal),
         ]);
 
         setMovie({
-          ...moviePayload,
-          isFavorite: favoritesIds.includes(moviePayload.id),
+          ...movieRes,
+          isFavorite: favoritesIds.includes(movieRes.id),
         });
         setRecommendations(
-          recommendationsPayload.results.map((recommendation) => ({
+          recommendationsRes.results.map((recommendation) => ({
             ...recommendation,
             isFavorite: favoritesIds.includes(recommendation.id),
           })),

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
+import { FAVORITES_STORAGE_KEY } from '../../environments';
 import { MovieCard } from '../../components';
+import { getPopular } from '../../adapters';
 
 class Popular extends React.Component {
   controller = new AbortController();
@@ -15,17 +16,11 @@ class Popular extends React.Component {
   }
 
   async componentDidMount() {
-    const url = new URL(`${API_PATH}/popular`);
-    url.searchParams.append('api_key', API_KEY);
-
     try {
-      const res = await fetch(url.toString(), {
-        signal: this.controller.signal,
-      });
-      const payload = await res.json();
+      const res = await getPopular(this.controller.signal);
 
       this.setState((state) => ({
-        movies: payload.results.map((movie) => ({
+        movies: res.results.map((movie) => ({
           ...movie,
           isFavorite: state.favorites.includes(movie.id),
         })),
