@@ -4,7 +4,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
 import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
-import { FavoriteAction, MovieCard } from '../../Components';
+import { FavoriteAction, MovieCard } from '../../components';
 
 function Movie() {
   const controller = new AbortController();
