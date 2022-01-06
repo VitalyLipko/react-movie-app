@@ -8,6 +8,7 @@ import MovieCard from '../MovieCard/MovieCard';
 import FavoriteAction from '../FavoriteAction/FavoriteAction';
 
 function Movie() {
+  const controller = new AbortController();
   const params = useParams();
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
@@ -43,26 +44,35 @@ function Movie() {
         `${API_PATH}/${params.id}/recommendations`,
       );
       recommendationsUrl.searchParams.append('api_key', API_KEY);
-      const [movieRes, recommendationsRes] = await Promise.all([
-        fetch(movieUrl.toString()),
-        fetch(recommendationsUrl.toString()),
-      ]);
-      const [moviePayload, recommendationsPayload] = await Promise.all([
-        movieRes.json(),
-        recommendationsRes.json(),
-      ]);
 
-      setMovie({
-        ...moviePayload,
-        isFavorite: favoritesIds.includes(moviePayload.id),
-      });
-      setRecommendations(
-        recommendationsPayload.results.map((recommendation) => ({
-          ...recommendation,
-          isFavorite: favoritesIds.includes(recommendation.id),
-        })),
-      );
+      try {
+        const [movieRes, recommendationsRes] = await Promise.all([
+          fetch(movieUrl.toString(), { signal: controller.signal }),
+          fetch(recommendationsUrl.toString(), { signal: controller.signal }),
+        ]);
+        const [moviePayload, recommendationsPayload] = await Promise.all([
+          movieRes.json(),
+          recommendationsRes.json(),
+        ]);
+
+        setMovie({
+          ...moviePayload,
+          isFavorite: favoritesIds.includes(moviePayload.id),
+        });
+        setRecommendations(
+          recommendationsPayload.results.map((recommendation) => ({
+            ...recommendation,
+            isFavorite: favoritesIds.includes(recommendation.id),
+          })),
+        );
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          throw err;
+        }
+      }
     })();
+
+    return () => controller.abort();
   }, [params.id]);
 
   useEffect(() => {

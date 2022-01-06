@@ -4,6 +4,8 @@ import MovieCard from '../MovieCard/MovieCard';
 import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../environments';
 
 class Popular extends React.Component {
+  controller = new AbortController();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,15 +18,23 @@ class Popular extends React.Component {
     const url = new URL(`${API_PATH}/popular`);
     url.searchParams.append('api_key', API_KEY);
 
-    const res = await fetch(url.toString());
-    const payload = await res.json();
+    try {
+      const res = await fetch(url.toString(), {
+        signal: this.controller.signal,
+      });
+      const payload = await res.json();
 
-    this.setState((state) => ({
-      movies: payload.results.map((movie) => ({
-        ...movie,
-        isFavorite: state.favorites.includes(movie.id),
-      })),
-    }));
+      this.setState((state) => ({
+        movies: payload.results.map((movie) => ({
+          ...movie,
+          isFavorite: state.favorites.includes(movie.id),
+        })),
+      }));
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        throw err;
+      }
+    }
   }
 
   componentDidUpdate(_, prevState, __) {
@@ -39,6 +49,10 @@ class Popular extends React.Component {
           .map(({ id }) => id),
       ),
     );
+  }
+
+  componentWillUnmount() {
+    this.controller.abort();
   }
 
   onFavoriteStatusChange(id) {

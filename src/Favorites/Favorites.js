@@ -5,6 +5,7 @@ import MovieCard from '../MovieCard/MovieCard';
 import './Favorites.css';
 
 export default function Favorites() {
+  const controller = new AbortController();
   const [favoritesIds, setFavoritesIds] = useState(
     JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
   );
@@ -13,17 +14,27 @@ export default function Favorites() {
 
   useEffect(() => {
     (async function fetchData() {
-      const res = await Promise.all(
-        favoritesIds.map(async (favoriteId) => {
-          const url = new URL(`${API_PATH}/${favoriteId}`);
-          url.searchParams.append('api_key', API_KEY);
-          const payload = await fetch(url.toString());
-          const movie = await payload.json();
-          return { ...movie, isFavorite: true };
-        }),
-      );
-      setFavorites(res);
+      try {
+        const res = await Promise.all(
+          favoritesIds.map(async (favoriteId) => {
+            const url = new URL(`${API_PATH}/${favoriteId}`);
+            url.searchParams.append('api_key', API_KEY);
+            const payload = await fetch(url.toString(), {
+              signal: controller.signal,
+            });
+            const movie = await payload.json();
+            return { ...movie, isFavorite: true };
+          }),
+        );
+        setFavorites(res);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          throw err;
+        }
+      }
     })();
+
+    return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
