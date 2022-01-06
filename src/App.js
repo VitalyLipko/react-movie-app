@@ -1,9 +1,7 @@
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import Popular from './Popular/Popular';
-import Movie from './Movie/Movie';
-import Layout from './Layout/Layout';
-import Favorites from './Favorites/Favorites';
+import Layout from './Components/Layout/Layout';
+import { Favorites, Movie, Popular } from './Pages';
 
 function App() {
   return (

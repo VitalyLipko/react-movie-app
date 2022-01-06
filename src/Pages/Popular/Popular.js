@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import MovieCard from '../MovieCard/MovieCard';
-import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../environments';
+import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
+import { MovieCard } from '../../Components';
 
 class Popular extends React.Component {
   controller = new AbortController();

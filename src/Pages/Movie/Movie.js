@@ -1,11 +1,10 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../environments';
+import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
 import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
-import MovieCard from '../MovieCard/MovieCard';
-import FavoriteAction from '../FavoriteAction/FavoriteAction';
+import { FavoriteAction, MovieCard } from '../../Components';
 
 function Movie() {
   const controller = new AbortController();

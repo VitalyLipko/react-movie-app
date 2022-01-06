@@ -1,6 +1,6 @@
 import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import NavButton from '../NavButton/NavButton';
+import { NavButton } from '../index';
 import React, { Fragment } from 'react';
 import './Layout.css';
 

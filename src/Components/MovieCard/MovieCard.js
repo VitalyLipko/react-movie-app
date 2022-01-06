@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './MovieCard.css';
-import FavoriteAction from '../FavoriteAction/FavoriteAction';
+import { FavoriteAction } from '../index';
 
 function MovieCard(props) {
   const ASPECT_RATIO = 4 / 3;

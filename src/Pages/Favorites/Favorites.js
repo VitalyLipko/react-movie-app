@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../environments';
+import { API_KEY, API_PATH, FAVORITES_STORAGE_KEY } from '../../environments';
 import { CircularProgress, Grid } from '@mui/material';
-import MovieCard from '../MovieCard/MovieCard';
+import { MovieCard } from '../../Components';
 import './Favorites.css';
 
 export default function Favorites() {
