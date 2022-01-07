@@ -1,79 +1,60 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { FAVORITES_STORAGE_KEY } from '../../environments';
 import { MovieCard } from '../../components';
 import { getPopular } from '../../adapters';
+import useFavoritesIds from '../../hooks/useFavoritesIds';
 
-class Popular extends React.Component {
-  controller = new AbortController();
+export default function Popular() {
+  const [movies, setMovies] = useState(null);
+  const [favoritesIds, setFavoritesIds] = useFavoritesIds();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      movies: null,
-      favorites: JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
-    };
+  function onFavoriteStatusChange(id) {
+    setMovies(
+      movies.map((movie) => ({
+        ...movie,
+        isFavorite: movie.id === id ? !movie.isFavorite : movie.isFavorite,
+      })),
+    );
+    setFavoritesIds(
+      favoritesIds.includes(id)
+        ? favoritesIds.filter((item) => item !== id)
+        : [...favoritesIds, id],
+    );
   }
 
-  async componentDidMount() {
+  useEffect(() => {
+    const controller = new AbortController();
     try {
-      const res = await getPopular(this.controller.signal);
-
-      this.setState((state) => ({
-        movies: res.results.map((movie) => ({
-          ...movie,
-          isFavorite: state.favorites.includes(movie.id),
-        })),
-      }));
+      (async function fetchData() {
+        const res = await getPopular(controller.signal);
+        setMovies(
+          res.results.map((movie) => ({
+            ...movie,
+            isFavorite: favoritesIds.includes(movie.id),
+          })),
+        );
+      })();
     } catch (err) {
       if (err.name !== 'AbortError') {
         throw err;
       }
     }
-  }
 
-  componentDidUpdate(_, prevState, __) {
-    if (!prevState.movies) {
-      return;
-    }
-    localStorage.setItem(
-      FAVORITES_STORAGE_KEY,
-      JSON.stringify(
-        this.state.movies
-          .filter(({ isFavorite }) => isFavorite)
-          .map(({ id }) => id),
-      ),
-    );
-  }
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentWillUnmount() {
-    this.controller.abort();
-  }
-
-  onFavoriteStatusChange(id) {
-    this.setState((state) => ({
-      movies: state.movies.map((movie) => ({
-        ...movie,
-        isFavorite: movie.id === id ? !movie.isFavorite : movie.isFavorite,
-      })),
-    }));
-  }
-
-  render() {
-    return (
-      <Grid container spacing={2} item p="16px 0 0 16px">
-        {this.state.movies &&
-          this.state.movies.map((movie) => (
-            <Grid item key={movie.id.toString()}>
-              <MovieCard
-                movie={movie}
-                onFavoriteStatusChange={this.onFavoriteStatusChange.bind(this)}
-              />
-            </Grid>
-          ))}
-      </Grid>
-    );
-  }
+  return (
+    <Grid container spacing={2} item p="16px 0 0 16px">
+      {movies &&
+        movies.map((movie) => (
+          <Grid item key={movie.id.toString()}>
+            <MovieCard
+              movie={movie}
+              onFavoriteStatusChange={onFavoriteStatusChange}
+            />
+          </Grid>
+        ))}
+    </Grid>
+  );
 }
-
-export default Popular;

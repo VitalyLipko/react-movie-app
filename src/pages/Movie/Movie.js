@@ -1,19 +1,17 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { FAVORITES_STORAGE_KEY } from '../../environments';
 import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
 import { FavoriteAction, MovieCard } from '../../components';
 import { getMovie, getRecommendations } from '../../adapters';
+import useFavoritesIds from '../../hooks/useFavoritesIds';
 
 function Movie() {
   const params = useParams();
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [favoritesIds, setFavoritesIds] = useState(
-    JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
-  );
+  const [favoritesIds, setFavoritesIds] = useFavoritesIds();
   const isInitialRender = useRef(true);
   const background = () =>
     `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`;
@@ -69,7 +67,7 @@ function Movie() {
       isInitialRender.current = false;
       return;
     }
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoritesIds));
+
     setRecommendations((prevRecommendations) =>
       prevRecommendations.map((recommendation) => ({
         ...recommendation,

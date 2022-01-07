@@ -1,16 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { FAVORITES_STORAGE_KEY } from '../../environments';
+import { useEffect, useState } from 'react';
 import { CircularProgress, Grid } from '@mui/material';
 import { MovieCard } from '../../components';
 import './Favorites.css';
 import { getMovie } from '../../adapters';
+import useFavoritesIds from '../../hooks/useFavoritesIds';
 
 export default function Favorites() {
-  const [favoritesIds, setFavoritesIds] = useState(
-    JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
-  );
+  const [favoritesIds, setFavoritesIds] = useFavoritesIds();
   const [favorites, setFavorites] = useState(null);
-  const isInitialRender = useRef(true);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -33,14 +30,6 @@ export default function Favorites() {
     return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
-    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoritesIds));
-  }, [favoritesIds]);
 
   function onFavoriteStatusChange(id) {
     setFavoritesIds(favoritesIds.filter((item) => item !== id));
