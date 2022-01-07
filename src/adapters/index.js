@@ -1,8 +1,9 @@
 import { API_KEY, API_PATH } from '../environments';
 
-export async function getPopular(signal) {
+export async function getPopular(page, signal) {
   const url = new URL(`${API_PATH}/popular`);
   url.searchParams.append('api_key', API_KEY);
+  url.searchParams.append('page', page);
   const res = await fetch(url.toString(), {
     signal,
   });

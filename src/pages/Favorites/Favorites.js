@@ -3,7 +3,7 @@ import { CircularProgress, Grid } from '@mui/material';
 import { MovieCard } from '../../components';
 import './Favorites.css';
 import { getMovie } from '../../adapters';
-import useFavoritesIds from '../../hooks/useFavoritesIds';
+import { useFavoritesIds } from '../../hooks';
 
 export default function Favorites() {
   const [favoritesIds, setFavoritesIds] = useFavoritesIds();

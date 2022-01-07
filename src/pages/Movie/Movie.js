@@ -5,7 +5,7 @@ import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
 import { FavoriteAction, MovieCard } from '../../components';
 import { getMovie, getRecommendations } from '../../adapters';
-import useFavoritesIds from '../../hooks/useFavoritesIds';
+import { useFavoritesIds } from '../../hooks';
 
 function Movie() {
   const params = useParams();
@@ -60,6 +60,7 @@ function Movie() {
     })();
 
     return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
   useEffect(() => {
