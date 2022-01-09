@@ -14,7 +14,9 @@ function Movie() {
   const [favoritesIds, setFavoritesIds] = useFavoritesIds();
   const isInitialRender = useRef(true);
   const background = () =>
-    `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`;
+    movie.backdrop_path
+      ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`
+      : undefined;
   const voteBadgeColor = () => {
     if (movie.vote_average >= 7) {
       return green[500];
@@ -149,29 +151,31 @@ function Movie() {
           <Grid item md>
             <Typography>{movie.overview}</Typography>
           </Grid>
-          <Grid container item spacing={2} md>
-            <Grid
-              className="Movie-additional-info-recommendations-title"
-              item
-              xs
-            >
-              <Divider>
-                <Typography variant="subtitle1" component="span">
-                  Recommendations
-                </Typography>
-              </Divider>
+          {!!recommendations?.length && (
+            <Grid container item spacing={2} md>
+              <Grid
+                className="Movie-additional-info-recommendations-title"
+                item
+                xs
+              >
+                <Divider>
+                  <Typography variant="subtitle1" component="span">
+                    Recommendations
+                  </Typography>
+                </Divider>
+              </Grid>
+              <Grid container item spacing={2} justifyContent="center">
+                {recommendations.map((recommendation) => (
+                  <Grid item key={recommendation.id}>
+                    <MovieCard
+                      movie={recommendation}
+                      onFavoriteStatusChange={onFavoriteStatusChange}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
-            <Grid container item spacing={2} justifyContent="center">
-              {recommendations.map((recommendation) => (
-                <Grid item key={recommendation.id}>
-                  <MovieCard
-                    movie={recommendation}
-                    onFavoriteStatusChange={onFavoriteStatusChange}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
+          )}
         </Grid>
       </Fragment>
     )

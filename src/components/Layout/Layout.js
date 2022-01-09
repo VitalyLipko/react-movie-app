@@ -1,6 +1,6 @@
 import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { NavButton } from '../index';
+import { NavButton, Search } from '../index';
 import React, { Fragment } from 'react';
 import './Layout.css';
 
@@ -22,6 +22,7 @@ export default function Layout() {
               </li>
             </ul>
           </nav>
+          <Search />
         </Toolbar>
       </AppBar>
       <Toolbar />
