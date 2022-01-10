@@ -3,10 +3,15 @@ import { CircularProgress, Grid } from '@mui/material';
 import { MovieCard } from '../../components';
 import './Favorites.css';
 import { getMovie } from '../../adapters';
-import { useFavoritesIds } from '../../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeStatus,
+  selectFavoriteIds,
+} from '../../features/favoriteIds/favoriteIdsSlice';
 
 export default function Favorites() {
-  const [favoritesIds, setFavoritesIds] = useFavoritesIds();
+  const favoriteIds = useSelector(selectFavoriteIds);
+  const dispatch = useDispatch();
   const [favorites, setFavorites] = useState(null);
 
   useEffect(() => {
@@ -14,7 +19,7 @@ export default function Favorites() {
     (async function fetchData() {
       try {
         const res = await Promise.all(
-          favoritesIds.map(async (favoriteId) => {
+          favoriteIds.map(async (favoriteId) => {
             const movie = await getMovie(favoriteId, controller.signal);
             return { ...movie, isFavorite: true };
           }),
@@ -28,12 +33,10 @@ export default function Favorites() {
     })();
 
     return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [favoriteIds]);
 
   function onFavoriteStatusChange(id) {
-    setFavoritesIds(favoritesIds.filter((item) => item !== id));
-    setFavorites(favorites.filter((favorite) => favorite.id !== id));
+    dispatch(changeStatus(id));
   }
 
   if (!favorites) {

@@ -5,14 +5,19 @@ import './Movie.css';
 import { green, red, grey } from '@mui/material/colors';
 import { FavoriteAction, MovieCard } from '../../components';
 import { getMovie, getRecommendations } from '../../adapters';
-import { useFavoritesIds } from '../../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeStatus,
+  selectFavoriteIds,
+} from '../../features/favoriteIds/favoriteIdsSlice';
 
 function Movie() {
   const params = useParams();
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [favoritesIds, setFavoritesIds] = useFavoritesIds();
   const isInitialRender = useRef(true);
+  const favoriteIds = useSelector(selectFavoriteIds);
+  const dispatch = useDispatch();
   const background = () =>
     movie.backdrop_path
       ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`
@@ -28,11 +33,7 @@ function Movie() {
   };
 
   function onFavoriteStatusChange(id) {
-    setFavoritesIds(
-      favoritesIds.includes(id)
-        ? favoritesIds.filter((item) => item !== id)
-        : [...favoritesIds, id],
-    );
+    dispatch(changeStatus(id));
   }
 
   useEffect(() => {
@@ -46,12 +47,12 @@ function Movie() {
 
         setMovie({
           ...movieRes,
-          isFavorite: favoritesIds.includes(movieRes.id),
+          isFavorite: favoriteIds.includes(movieRes.id),
         });
         setRecommendations(
           recommendationsRes.results.map((recommendation) => ({
             ...recommendation,
-            isFavorite: favoritesIds.includes(recommendation.id),
+            isFavorite: favoriteIds.includes(recommendation.id),
           })),
         );
       } catch (err) {
@@ -74,14 +75,14 @@ function Movie() {
     setRecommendations((prevRecommendations) =>
       prevRecommendations.map((recommendation) => ({
         ...recommendation,
-        isFavorite: favoritesIds.includes(recommendation.id),
+        isFavorite: favoriteIds.includes(recommendation.id),
       })),
     );
     setMovie((prevMovie) => ({
       ...prevMovie,
-      isFavorite: favoritesIds.includes(prevMovie.id),
+      isFavorite: favoriteIds.includes(prevMovie.id),
     }));
-  }, [favoritesIds]);
+  }, [favoriteIds]);
 
   return (
     movie && (

@@ -2,3 +2,11 @@
     border: 1px solid white;
     border-radius: 0.25rem;
 }
+
+.SearchResultItem {
+    width: 100%;
+}
+
+.SearchResultItem-title {
+    margin-right: 8px;
+}

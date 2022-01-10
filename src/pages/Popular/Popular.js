@@ -1,14 +1,21 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Grid, Pagination } from '@mui/material';
 import { MovieCard } from '../../components';
 import { getPopular } from '../../adapters';
 import './Popular.css';
-import { useFavoritesIds, usePageSearchParam } from '../../hooks';
+import { usePageSearchParam } from '../../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeStatus,
+  selectFavoriteIds,
+} from '../../features/favoriteIds/favoriteIdsSlice';
 
 export default function Popular() {
   const [movies, setMovies] = useState(null);
-  const [favoritesIds, setFavoritesIds] = useFavoritesIds();
   const [pageSearchParam, setPageSearchParam] = usePageSearchParam();
+  const favoriteIds = useSelector(selectFavoriteIds);
+  const dispatch = useDispatch();
+  const isInitialRender = useRef(true);
 
   function onFavoriteStatusChange(id) {
     setMovies(
@@ -17,11 +24,7 @@ export default function Popular() {
         isFavorite: movie.id === id ? !movie.isFavorite : movie.isFavorite,
       })),
     );
-    setFavoritesIds(
-      favoritesIds.includes(id)
-        ? favoritesIds.filter((item) => item !== id)
-        : [...favoritesIds, id],
-    );
+    dispatch(changeStatus(id));
   }
 
   function onPageChange(_, page) {
@@ -36,7 +39,7 @@ export default function Popular() {
         setMovies(
           res.results.map((movie) => ({
             ...movie,
-            isFavorite: favoritesIds.includes(movie.id),
+            isFavorite: favoriteIds.includes(movie.id),
           })),
         );
       } catch (err) {
@@ -49,6 +52,19 @@ export default function Popular() {
     return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSearchParam]);
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+    setMovies((prevMovies) =>
+      prevMovies.map((movie) => ({
+        ...movie,
+        isFavorite: favoriteIds.includes(movie.id),
+      })),
+    );
+  }, [favoriteIds]);
 
   return (
     <Fragment>

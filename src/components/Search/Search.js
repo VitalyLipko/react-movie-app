@@ -16,6 +16,11 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { getSearchResults } from '../../adapters';
 import { useLocation } from 'react-router-dom';
 import { SearchResultItem } from '../index';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  changeStatus,
+  selectFavoriteIds,
+} from '../../features/favoriteIds/favoriteIdsSlice';
 
 export default function Search() {
   const [query, setQuery] = useState('');
@@ -23,16 +28,19 @@ export default function Search() {
   const [openPopover, setOpenPopover] = useState(false);
   const searchRef = useRef(null);
   const { pathname } = useLocation();
+  const favoriteIds = useSelector(selectFavoriteIds);
+  const dispatch = useDispatch();
+  const isInitialRender = useRef(true);
 
   function onQueryChange(event) {
     setQuery(event.target.value);
   }
 
-  function onClosePopover() {
+  function onPopoverClose() {
     setOpenPopover(false);
   }
 
-  function onClearSearch() {
+  function onSearchClear() {
     setQuery('');
   }
 
@@ -46,7 +54,12 @@ export default function Search() {
     (async function fetchData() {
       try {
         const res = await getSearchResults(query, controller.signal);
-        setSearchResults(res.results);
+        setSearchResults(
+          res.results.map((movie) => ({
+            ...movie,
+            isFavorite: favoriteIds.includes(movie.id),
+          })),
+        );
       } catch (err) {
         if (err.name !== 'AbortError') {
           throw err;
@@ -55,11 +68,26 @@ export default function Search() {
     })();
 
     return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   useEffect(() => {
     setQuery('');
   }, [pathname]);
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
+    setSearchResults((prevSearchResults) =>
+      prevSearchResults?.map((movie) => ({
+        ...movie,
+        isFavorite: favoriteIds.includes(movie.id),
+      })),
+    );
+  }, [favoriteIds]);
 
   return (
     <Fragment>
@@ -74,7 +102,7 @@ export default function Search() {
         endAdornment={
           <InputAdornment position="end">
             {query && (
-              <IconButton aria-label="clear" onClick={onClearSearch}>
+              <IconButton aria-label="clear" onClick={onSearchClear}>
                 <ClearOutlined />
               </IconButton>
             )}
@@ -85,18 +113,22 @@ export default function Search() {
         value={query}
         onChange={onQueryChange}
       />
-      <ClickAwayListener onClickAway={onClosePopover}>
+      <ClickAwayListener onClickAway={onPopoverClose}>
         <Popper
           className="Search-popper"
           open={openPopover}
           anchorEl={searchRef.current}
-          onClose={onClosePopover}
+          onClose={onPopoverClose}
         >
           <Paper className="Search-popper-results" elevation={3}>
             {searchResults?.length ? (
               <List>
                 {searchResults.map((movie) => (
-                  <SearchResultItem key={movie.id} movie={movie} />
+                  <SearchResultItem
+                    key={movie.id}
+                    movie={movie}
+                    onFavoriteStatusChange={(id) => dispatch(changeStatus(id))}
+                  />
                 ))}
               </List>
             ) : !searchResults ? (
