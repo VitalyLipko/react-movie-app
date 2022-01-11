@@ -2,7 +2,6 @@ import { Divider, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import './Movie.css';
-import { green, red, grey } from '@mui/material/colors';
 import { FavoriteAction, MovieCard } from '../../components';
 import { getMovie, getRecommendations } from '../../adapters';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import {
   changeStatus,
   selectFavoriteIds,
 } from '../../features/favoriteIds/favoriteIdsSlice';
+import { getVoteBadgeColor } from '../../utils';
 
 function Movie() {
   const params = useParams();
@@ -22,15 +22,6 @@ function Movie() {
     movie.backdrop_path
       ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`
       : undefined;
-  const voteBadgeColor = () => {
-    if (movie.vote_average >= 7) {
-      return green[500];
-    }
-    if (movie.vote_average >= 5) {
-      return grey[500];
-    }
-    return red[500];
-  };
 
   function onFavoriteStatusChange(id) {
     dispatch(changeStatus(id));
@@ -117,7 +108,7 @@ function Movie() {
               className="Movie-main-info-container-header-vote-badge"
               variant="h2"
               component="span"
-              bgcolor={voteBadgeColor()}
+              bgcolor={getVoteBadgeColor(movie.vote_average)}
             >
               {movie.vote_average}
             </Typography>

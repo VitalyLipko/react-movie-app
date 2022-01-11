@@ -6,9 +6,11 @@ import {
   ListItemButton,
   ListItemText,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import './SearchResultItem.css';
 import { FavoriteAction } from '../index';
+import { getVoteBadgeColor } from '../../utils';
 
 export default function SearchResultItem(props) {
   const CustomLinkItem = useMemo(
@@ -48,13 +50,27 @@ export default function SearchResultItem(props) {
             />
           )}
         </ListItemAvatar>
-        <Tooltip title={props.movie.title}>
-          <ListItemText
-            className="SearchResultItem-title"
-            primary={props.movie.title}
-            primaryTypographyProps={{ noWrap: true }}
-          />
-        </Tooltip>
+        <ListItemText className="SearchResultItem-title" disableTypography>
+          <Tooltip title={props.movie.title}>
+            <Typography
+              className="SearchResultItem-title-primary"
+              component="span"
+              noWrap
+            >
+              {props.movie.title}
+            </Typography>
+          </Tooltip>
+          <Typography
+            className="SearchResultItem-title-secondary"
+            component="span"
+            variant="body2"
+            align="center"
+            bgcolor={getVoteBadgeColor(props.movie.vote_average)}
+            noWrap
+          >
+            {props.movie.vote_average}
+          </Typography>
+        </ListItemText>
       </ListItemButton>
     </ListItem>
   );

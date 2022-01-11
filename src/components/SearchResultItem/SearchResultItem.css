@@ -1,12 +1,24 @@
 .SearchResultItem img {
-    border: 1px solid white;
-    border-radius: 0.25rem;
+  border: 1px solid white;
+  border-radius: 0.25rem;
 }
 
 .SearchResultItem {
-    width: 100%;
+  width: 100%;
 }
 
 .SearchResultItem-title {
-    margin-right: 8px;
+  margin-right: 8px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.SearchResultItem-title-primary {
+  max-width: 100%;
+}
+
+.SearchResultItem-title-secondary {
+  width: 28px;
+  border-radius: 0.125rem;
 }
