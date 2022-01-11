@@ -13,7 +13,6 @@ export const favoriteIdsSlice = createSlice({
       } else {
         state.value.push(action.payload);
       }
-      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(state.value));
     },
   },
 });
