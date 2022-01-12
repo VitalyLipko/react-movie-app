@@ -9,6 +9,9 @@ import { BrowserRouter } from 'react-router-dom';
 import ScrollRestoration from './ScrollRestoration/ScrollRestoration';
 import { Provider } from 'react-redux';
 import store from './app/store';
+import { getGenresThunkFunction } from './features/genres/genresSlice';
+
+store.dispatch(getGenresThunkFunction());
 
 ReactDOM.render(
   <React.StrictMode>

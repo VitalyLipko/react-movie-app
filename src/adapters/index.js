@@ -36,3 +36,12 @@ export async function getSearchResults(query, signal) {
 
   return res.json();
 }
+
+export async function getGenres() {
+  const url = new URL(`${API_PATH}/genre/movie/list`);
+  url.searchParams.append('api_key', API_KEY);
+
+  const res = await fetch(url.toString());
+
+  return res.json();
+}

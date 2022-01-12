@@ -21,6 +21,7 @@ import {
   changeStatus,
   selectFavoriteIds,
 } from '../../features/favoriteIds/favoriteIdsSlice';
+import { selectGenres } from '../../features/genres/genresSlice';
 
 export default function Search() {
   const [query, setQuery] = useState('');
@@ -31,6 +32,7 @@ export default function Search() {
   const favoriteIds = useSelector(selectFavoriteIds);
   const dispatch = useDispatch();
   const isInitialRender = useRef(true);
+  const genres = useSelector(selectGenres);
 
   function onQueryChange(event) {
     setQuery(event.target.value);
@@ -44,6 +46,16 @@ export default function Search() {
     setQuery('');
   }
 
+  function searchResultsEnricher(movies) {
+    return movies?.map((movie) => ({
+      ...movie,
+      isFavorite: favoriteIds.includes(movie.id),
+      genres: movie.genre_ids.map((id) =>
+        genres.find((genre) => genre.id === id),
+      ),
+    }));
+  }
+
   useEffect(() => {
     setOpenPopover(!!query);
     if (!query) {
@@ -54,12 +66,7 @@ export default function Search() {
     (async function fetchData() {
       try {
         const res = await getSearchResults(query, controller.signal);
-        setSearchResults(
-          res.results.map((movie) => ({
-            ...movie,
-            isFavorite: favoriteIds.includes(movie.id),
-          })),
-        );
+        setSearchResults(searchResultsEnricher(res.results));
       } catch (err) {
         if (err.name !== 'AbortError') {
           throw err;
@@ -82,11 +89,9 @@ export default function Search() {
     }
 
     setSearchResults((prevSearchResults) =>
-      prevSearchResults?.map((movie) => ({
-        ...movie,
-        isFavorite: favoriteIds.includes(movie.id),
-      })),
+      searchResultsEnricher(prevSearchResults),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favoriteIds]);
 
   return (

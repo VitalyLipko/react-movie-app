@@ -17,6 +17,7 @@ export const favoriteIdsSlice = createSlice({
   },
 });
 
+export const FAVORITE_IDS_CHANGE_STATUS_ACTION = 'favoriteIds/changeStatus';
 export const selectFavoriteIds = (state) => state.favoriteIds.value;
 export const { changeStatus } = favoriteIdsSlice.actions;
 export default favoriteIdsSlice.reducer;

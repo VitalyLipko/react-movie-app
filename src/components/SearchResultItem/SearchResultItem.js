@@ -60,16 +60,28 @@ export default function SearchResultItem(props) {
               {props.movie.title}
             </Typography>
           </Tooltip>
-          <Typography
-            className="SearchResultItem-title-secondary"
-            component="span"
-            variant="body2"
-            align="center"
-            bgcolor={getVoteBadgeColor(props.movie.vote_average)}
-            noWrap
-          >
-            {props.movie.vote_average}
-          </Typography>
+          <span className="SearchResultItem-title-secondary">
+            <Typography
+              className="SearchResultItem-title-secondary-vote-badge"
+              component="span"
+              variant="body2"
+              align="center"
+              bgcolor={getVoteBadgeColor(props.movie.vote_average)}
+              noWrap
+            >
+              {props.movie.vote_average}
+            </Typography>
+            {!!props.movie.genres.length && (
+              <Typography
+                className="SearchResultItem-title-secondary-genre"
+                component="span"
+                variant="body2"
+                color="secondary"
+              >
+                {props.movie.genres[0].name}
+              </Typography>
+            )}
+          </span>
         </ListItemText>
       </ListItemButton>
     </ListItem>
