@@ -4,3 +4,4 @@ export { default as MovieCard } from './MovieCard/MovieCard';
 export { default as NavButton } from './NavButton/NavButton';
 export { default as Search } from './Search/Search';
 export { default as SearchResultItem } from './SearchResultItem/SearchResultItem';
+export { default as ScrollRestoration } from './ScrollRestoration/ScrollRestoration';

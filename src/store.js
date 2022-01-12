@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import favoriteIdsReducer, {
+import {
   FAVORITE_IDS_CHANGE_STATUS_ACTION,
+  favoriteIdsReducer,
   selectFavoriteIds,
-} from '../features/favoriteIds/favoriteIdsSlice';
-import genresReducer from '../features/genres/genresSlice';
-import { FAVORITES_STORAGE_KEY } from '../environments';
+  genresReducer,
+} from './slices';
+import { FAVORITES_STORAGE_KEY } from './environments';
 
 const favoritesStorageMiddleware = (store) => (next) => (action) => {
   const result = next(action);

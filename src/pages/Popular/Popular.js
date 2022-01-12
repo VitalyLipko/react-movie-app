@@ -5,10 +5,7 @@ import { getPopular } from '../../adapters';
 import './Popular.css';
 import { usePageSearchParam } from '../../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  changeStatus,
-  selectFavoriteIds,
-} from '../../features/favoriteIds/favoriteIdsSlice';
+import { changeStatus, selectFavoriteIds } from '../../slices';
 
 export default function Popular() {
   const [movies, setMovies] = useState(null);

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getGenres } from '../../adapters';
+import { getGenres } from '../adapters';
 
 export const getGenresThunkFunction = createAsyncThunk(
   'genres/getGenres',

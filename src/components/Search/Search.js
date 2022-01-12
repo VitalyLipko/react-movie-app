@@ -17,11 +17,7 @@ import { getSearchResults } from '../../adapters';
 import { useLocation } from 'react-router-dom';
 import { SearchResultItem } from '../index';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  changeStatus,
-  selectFavoriteIds,
-} from '../../features/favoriteIds/favoriteIdsSlice';
-import { selectGenres } from '../../features/genres/genresSlice';
+import { selectGenres, changeStatus, selectFavoriteIds } from '../../slices';
 
 export default function Search() {
   const [query, setQuery] = useState('');

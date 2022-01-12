@@ -6,10 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { BrowserRouter } from 'react-router-dom';
-import ScrollRestoration from './ScrollRestoration/ScrollRestoration';
+import { ScrollRestoration } from './components';
 import { Provider } from 'react-redux';
-import store from './app/store';
-import { getGenresThunkFunction } from './features/genres/genresSlice';
+import store from './store';
+import { getGenresThunkFunction } from './slices';
 
 store.dispatch(getGenresThunkFunction());
 
