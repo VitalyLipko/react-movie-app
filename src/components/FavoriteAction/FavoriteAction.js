@@ -1,22 +1,21 @@
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { Favorite } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
 
 export default function FavoriteAction(props) {
-  const [label, setLabel] = useState('');
+  const { isFavorite, isButton, onFavoriteStatusChange } = props;
+  const actionColor = isFavorite ? 'error' : undefined;
+  const FavoriteIcon = <Favorite fontSize={isButton ? 'inherit' : undefined} />;
+  const label = isFavorite ? 'Remove from favorites' : 'Add to favorites';
+  console.log(props.test);
 
-  useEffect(() => {
-    setLabel(props.isFavorite ? 'Remove from favorites' : 'Add to favorites');
-  }, [props.isFavorite]);
-
-  if (props.isButton) {
+  if (isButton) {
     return (
       <Button
         variant="outlined"
         size="small"
-        startIcon={<Favorite fontSize="inherit" />}
-        color={props.isFavorite ? 'error' : undefined}
-        onClick={props.onFavoriteStatusChange}
+        startIcon={FavoriteIcon}
+        color={actionColor}
+        onClick={onFavoriteStatusChange}
       >
         {label}
       </Button>
@@ -26,12 +25,10 @@ export default function FavoriteAction(props) {
   return (
     <IconButton
       aria-label={label}
-      color={props.isFavorite ? 'error' : undefined}
-      onClick={props.onFavoriteStatusChange}
+      color={actionColor}
+      onClick={onFavoriteStatusChange}
     >
-      <Tooltip title={label}>
-        <Favorite />
-      </Tooltip>
+      <Tooltip title={label}>{FavoriteIcon}</Tooltip>
     </IconButton>
   );
 }
