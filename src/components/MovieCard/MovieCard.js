@@ -10,6 +10,8 @@ import {
 import { Link } from 'react-router-dom';
 import './MovieCard.css';
 import { FavoriteAction } from '../index';
+import { memo } from 'react';
+import isEqual from 'lodash/isEqual';
 
 function MovieCard(props) {
   const { movie, onFavoriteStatusChange } = props;
@@ -36,7 +38,6 @@ function MovieCard(props) {
       </CardActionArea>
       <CardActions>
         <FavoriteAction
-          test={movie.original_title}
           isFavorite={movie.isFavorite}
           onFavoriteStatusChange={() => onFavoriteStatusChange(movie.id)}
         />
@@ -45,4 +46,6 @@ function MovieCard(props) {
   );
 }
 
-export default MovieCard;
+const MovieCardMemo = memo(MovieCard, (pr, cr) => isEqual(pr.movie, cr.movie));
+
+export default MovieCardMemo;

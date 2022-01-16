@@ -6,7 +6,6 @@ export default function FavoriteAction(props) {
   const actionColor = isFavorite ? 'error' : undefined;
   const FavoriteIcon = <Favorite fontSize={isButton ? 'inherit' : undefined} />;
   const label = isFavorite ? 'Remove from favorites' : 'Add to favorites';
-  console.log(props.test);
 
   if (isButton) {
     return (
