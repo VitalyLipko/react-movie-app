@@ -3,25 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme';
 import { BrowserRouter } from 'react-router-dom';
 import { ScrollRestoration } from './components';
-import { Provider } from 'react-redux';
-import store from './store';
-import { getGenresThunkFunction } from './slices';
-
-store.dispatch(getGenresThunkFunction());
+import { StoreProvider } from './store';
+import { CustomThemeProvider } from './theme';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ScrollRestoration />
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
+      <CustomThemeProvider>
+        <StoreProvider>
           <App />
-        </Provider>
-      </ThemeProvider>
+        </StoreProvider>
+      </CustomThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),

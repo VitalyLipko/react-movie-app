@@ -4,8 +4,8 @@ import {
   favoriteIdsReducer,
   selectFavoriteIds,
   genresReducer,
-} from './slices';
-import { FAVORITES_STORAGE_KEY } from './environments';
+} from './index';
+import { FAVORITES_STORAGE_KEY } from '../environments';
 
 const favoritesStorageMiddleware = (store) => (next) => (action) => {
   const result = next(action);
