@@ -9,8 +9,7 @@ export default function usePageSearchParam() {
 
   useEffect(() => {
     setSearchParams(page === 1 ? {} : { page });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, setSearchParams]);
 
   return [page, setPage];
 }

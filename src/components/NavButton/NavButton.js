@@ -4,16 +4,17 @@ import './NavButton.css';
 import { forwardRef, useMemo } from 'react';
 
 export default function NavButton(props) {
+  const { link, label } = props;
   const CustomNavLink = useMemo(
     () =>
       forwardRef((navLinkProps, ref) => (
-        <NavLink ref={ref} {...navLinkProps} role={undefined} to={props.link} />
+        <NavLink ref={ref} {...navLinkProps} role={undefined} to={link} />
       )),
-    [props.link],
+    [link],
   );
   return (
     <Button className="NavButton" component={CustomNavLink}>
-      {props.label}
+      {label}
     </Button>
   );
 }

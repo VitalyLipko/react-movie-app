@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { FAVORITES_STORAGE_KEY } from '../environments';
+import { FAVORITES_STORAGE_KEY } from '../../environments';
 
 export const favoriteIdsSlice = createSlice({
   name: 'favoriteIds',

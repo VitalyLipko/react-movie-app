@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ListItem,
@@ -11,53 +11,53 @@ import {
 import './SearchResultItem.css';
 import { FavoriteAction } from '../index';
 import { getVoteBadgeColor } from '../../utils';
+import isEqual from 'lodash/isEqual';
 
-export default function SearchResultItem(props) {
+function SearchResultItem(props) {
+  const { movie, onFavoriteStatusChange } = props;
   const CustomLinkItem = useMemo(
     () =>
       forwardRef((listItemProps, ref) => (
         <Link
           ref={ref}
           {...listItemProps}
-          to={`/movies/${props.movie.id}`}
+          to={`/movies/${movie.id}`}
           role={undefined}
         />
       )),
-    [props.movie.id],
+    [movie.id],
   );
 
   return (
     <ListItem
       secondaryAction={
         <FavoriteAction
-          movie={props.movie}
-          isFavorite={props.movie.isFavorite}
-          onFavoriteStatusChange={() =>
-            props.onFavoriteStatusChange(props.movie.id)
-          }
+          movie={movie}
+          isFavorite={movie.isFavorite}
+          onFavoriteStatusChange={() => onFavoriteStatusChange(movie.id)}
         />
       }
       disablePadding
     >
       <ListItemButton className="SearchResultItem" component={CustomLinkItem}>
         <ListItemAvatar>
-          {props.movie.poster_path && (
+          {movie.poster_path && (
             <img
               height="53px"
               width="40px"
-              src={`https://image.tmdb.org/t/p/original${props.movie.poster_path}`}
-              alt={props.movie.original_title}
+              src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+              alt={movie.original_title}
             />
           )}
         </ListItemAvatar>
         <ListItemText className="SearchResultItem-title" disableTypography>
-          <Tooltip title={props.movie.title}>
+          <Tooltip title={movie.title}>
             <Typography
               className="SearchResultItem-title-primary"
               component="span"
               noWrap
             >
-              {props.movie.title}
+              {movie.title}
             </Typography>
           </Tooltip>
           <span className="SearchResultItem-title-secondary">
@@ -66,19 +66,19 @@ export default function SearchResultItem(props) {
               component="span"
               variant="body2"
               align="center"
-              bgcolor={getVoteBadgeColor(props.movie.vote_average)}
+              bgcolor={getVoteBadgeColor(movie.vote_average)}
               noWrap
             >
-              {props.movie.vote_average}
+              {movie.vote_average}
             </Typography>
-            {!!props.movie.genres.length && (
+            {!!movie.genres.length && (
               <Typography
                 className="SearchResultItem-title-secondary-genre"
                 component="span"
                 variant="body2"
                 color="secondary"
               >
-                {props.movie.genres[0].name}
+                {movie.genres[0].name}
               </Typography>
             )}
           </span>
@@ -87,3 +87,8 @@ export default function SearchResultItem(props) {
     </ListItem>
   );
 }
+
+const SearchResultItemMemo = memo(SearchResultItem, (pr, cr) =>
+  isEqual(pr.movie, cr.movie),
+);
+export default SearchResultItemMemo;

@@ -5,7 +5,7 @@ import './Movie.css';
 import { FavoriteAction, MovieCard } from '../../components';
 import { getMovie, getRecommendations } from '../../adapters';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeStatus, selectFavoriteIds } from '../../slices';
+import { changeStatus, selectFavoriteIds } from '../../store';
 import { getVoteBadgeColor } from '../../utils';
 
 function Movie() {

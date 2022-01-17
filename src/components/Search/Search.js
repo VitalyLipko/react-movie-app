@@ -12,16 +12,17 @@ import {
 } from '@mui/material';
 import { ClearOutlined, SearchOutlined } from '@mui/icons-material';
 import './Search.css';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { getSearchResults } from '../../adapters';
 import { useLocation } from 'react-router-dom';
 import { SearchResultItem } from '../index';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGenres, changeStatus, selectFavoriteIds } from '../../slices';
+import { selectGenres, changeStatus, selectFavoriteIds } from '../../store';
 
 export default function Search() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState(null);
+  const [rawSearchResults, setRawSearchResults] = useState(null);
   const [openPopover, setOpenPopover] = useState(false);
   const searchRef = useRef(null);
   const { pathname } = useLocation();
@@ -29,6 +30,17 @@ export default function Search() {
   const dispatch = useDispatch();
   const isInitialRender = useRef(true);
   const genres = useSelector(selectGenres);
+  const searchResultsEnricher = useCallback(
+    (movies) =>
+      movies?.map((movie) => ({
+        ...movie,
+        isFavorite: favoriteIds.includes(movie.id),
+        genres: movie.genre_ids.map((id) =>
+          genres.find((genre) => genre.id === id),
+        ),
+      })),
+    [favoriteIds, genres],
+  );
 
   function onQueryChange(event) {
     setQuery(event.target.value);
@@ -42,27 +54,17 @@ export default function Search() {
     setQuery('');
   }
 
-  function searchResultsEnricher(movies) {
-    return movies?.map((movie) => ({
-      ...movie,
-      isFavorite: favoriteIds.includes(movie.id),
-      genres: movie.genre_ids.map((id) =>
-        genres.find((genre) => genre.id === id),
-      ),
-    }));
-  }
-
   useEffect(() => {
     setOpenPopover(!!query);
     if (!query) {
-      setSearchResults(null);
+      setRawSearchResults(null);
       return;
     }
     const controller = new AbortController();
-    (async function fetchData() {
+    (async function () {
       try {
         const res = await getSearchResults(query, controller.signal);
-        setSearchResults(searchResultsEnricher(res.results));
+        setRawSearchResults(res.results);
       } catch (err) {
         if (err.name !== 'AbortError') {
           throw err;
@@ -71,7 +73,6 @@ export default function Search() {
     })();
 
     return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   useEffect(() => {
@@ -84,11 +85,8 @@ export default function Search() {
       return;
     }
 
-    setSearchResults((prevSearchResults) =>
-      searchResultsEnricher(prevSearchResults),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favoriteIds]);
+    setSearchResults(searchResultsEnricher(rawSearchResults));
+  }, [rawSearchResults, searchResultsEnricher]);
 
   return (
     <Fragment>
