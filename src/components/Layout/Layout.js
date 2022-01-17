@@ -1,7 +1,7 @@
 import { AppBar, Grid, Toolbar, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import { NavButton, Search } from '../index';
-import React, { Fragment } from 'react';
+import { NavButton, PageProgress, Search } from '../index';
+import { Fragment, Suspense } from 'react';
 import './Layout.css';
 
 export default function Layout() {
@@ -26,9 +26,11 @@ export default function Layout() {
         </Toolbar>
       </AppBar>
       <Toolbar />
-      <Grid container>
-        <Outlet />
-      </Grid>
+      <Suspense fallback={<PageProgress />}>
+        <Grid container>
+          <Outlet />
+        </Grid>
+      </Suspense>
     </Fragment>
   );
 }

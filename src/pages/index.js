@@ -1,3 +1,5 @@
-export { default as Favorites } from './Favorites/Favorites';
-export { default as Movie } from './Movie/Movie';
-export { default as Popular } from './Popular/Popular';
+import { lazy } from 'react';
+
+export const Favorites = lazy(() => import('./Favorites/Favorites'));
+export const Movie = lazy(() => import('./Movie/Movie'));
+export const Popular = lazy(() => import('./Popular/Popular'));
