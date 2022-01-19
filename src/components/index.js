@@ -8,3 +8,4 @@ export { default as ScrollRestoration } from './ScrollRestoration/ScrollRestorat
 export { default as PageProgress } from './PageProgress/PageProgress';
 export { default as MovieList } from './MovieList/MovieList';
 export { default as MovieMainInfo } from './MovieMainInfo/MovieMainInfo';
+export { default as SearchResults } from './SearchResults/SearchResults';

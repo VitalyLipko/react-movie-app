@@ -1,0 +1,10 @@
+.Search-results-empty {
+    padding: 16px;
+    text-align: center;
+}
+
+.Search-results-in-progress {
+    display:flex;
+    justify-content: center;
+    padding: 16px;
+}

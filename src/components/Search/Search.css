@@ -17,14 +17,3 @@
   width: 318px;
   overflow: hidden auto;
 }
-
-.Search-popper-no-results {
-  padding: 16px;
-  text-align: center;
-}
-
-.Search-popper-in-progress {
-  display:flex;
-  justify-content: center;
-  padding: 16px;
-}
