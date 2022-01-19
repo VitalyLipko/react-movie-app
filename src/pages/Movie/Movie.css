@@ -1,39 +1,6 @@
-:root {
-  --backdrop-container-height: 400px;
-}
-
 .Movie-backdrop-container {
   height: var(--backdrop-container-height);
   width: 100%;
-}
-
-.Movie-main-info-container {
-  position: absolute;
-  height: var(--backdrop-container-height);
-  padding: 12px 24px 0 24px;
-  background: rgba(0, 0, 0, 0.44);
-}
-
-.MuiTypography-root.Movie-main-info-container-header-title {
-  margin-right: 16px;
-  color: #ffffff;
-  font-weight: bold;
-}
-
-.Movie-main-info-container-header-vote-badge {
-  width: 100px;
-  flex-shrink: 0;
-  text-align: center;
-  border-radius: 0.25rem;
-}
-
-.MuiTypography-root.Movie-main-info-container-header-tagline {
-  color: #ffffff;
-  font-style: italic;
-}
-
-.MuiGrid-item.Movie-main-info-container-header-favorite-action {
-  margin: auto 0 24px auto;
 }
 
 .Movie-additional-info {

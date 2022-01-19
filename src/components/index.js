@@ -6,3 +6,5 @@ export { default as Search } from './Search/Search';
 export { default as SearchResultItem } from './SearchResultItem/SearchResultItem';
 export { default as ScrollRestoration } from './ScrollRestoration/ScrollRestoration';
 export { default as PageProgress } from './PageProgress/PageProgress';
+export { default as MovieList } from './MovieList/MovieList';
+export { default as MovieMainInfo } from './MovieMainInfo/MovieMainInfo';
