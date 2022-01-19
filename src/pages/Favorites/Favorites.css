@@ -1,3 +1,5 @@
 .Favorites-progress, .Favorites-empty {
-    height: 300px
+    height: 300px;
+    justify-content:center;
+    align-items: center;
 }

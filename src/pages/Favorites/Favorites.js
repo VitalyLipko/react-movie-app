@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { CircularProgress, Grid } from '@mui/material';
-import { MovieCard } from '../../components';
+import { MovieList } from '../../components';
 import './Favorites.css';
 import { getMovie } from '../../adapters';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeStatus, selectFavoriteIds } from '../../store';
+import { useSelector } from 'react-redux';
+import { selectFavoriteIds } from '../../store';
 
 export default function Favorites() {
   const favoriteIds = useSelector(selectFavoriteIds);
-  const dispatch = useDispatch();
   const [favorites, setFavorites] = useState(null);
 
   useEffect(() => {
@@ -32,19 +31,9 @@ export default function Favorites() {
     return () => controller.abort();
   }, [favoriteIds]);
 
-  function onFavoriteStatusChange(id) {
-    dispatch(changeStatus(id));
-  }
-
   if (!favorites) {
     return (
-      <Grid
-        className="Favorites-progress"
-        container
-        justifyContent="center"
-        alignItems="center"
-        item
-      >
+      <Grid className="Favorites-progress" container item>
         <Grid item>
           <CircularProgress />
         </Grid>
@@ -54,28 +43,11 @@ export default function Favorites() {
 
   if (!favorites.length) {
     return (
-      <Grid
-        className="Favorites-empty"
-        container
-        justifyContent="center"
-        alignItems="center"
-        item
-      >
+      <Grid className="Favorites-empty" container item>
         No favorites
       </Grid>
     );
   }
 
-  return (
-    <Grid container item spacing={2} p="16px 0 0 16px">
-      {favorites.map((favorite) => (
-        <Grid item key={favorite.id}>
-          <MovieCard
-            movie={favorite}
-            onFavoriteStatusChange={onFavoriteStatusChange}
-          />
-        </Grid>
-      ))}
-    </Grid>
-  );
+  return <MovieList movies={favorites} cssProps={{ p: '16px 0 0 16px' }} />;
 }
