@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ClearOutlined, SearchOutlined } from '@mui/icons-material';
 import './Search.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getSearchResults } from '../../adapters';
 import { useLocation } from 'react-router-dom';
 import { SearchResults } from '../index';
@@ -20,18 +20,29 @@ export default function Search() {
   const [openPopover, setOpenPopover] = useState(false);
   const searchRef = useRef(null);
   const { pathname } = useLocation();
-
-  function onQueryChange(event) {
-    setQuery(event.target.value);
-  }
-
-  function onPopoverClose() {
-    setOpenPopover(false);
-  }
-
-  function onSearchClear() {
-    setQuery('');
-  }
+  const onQueryChange = (event) => setQuery(event.target.value);
+  const onPopoverClose = () => setOpenPopover(false);
+  const onSearchClear = () => setQuery('');
+  const InputStartAdornment = useMemo(
+    () => (
+      <InputAdornment position="start">
+        <SearchOutlined />
+      </InputAdornment>
+    ),
+    [],
+  );
+  const InputEndAdornment = useMemo(
+    () => (
+      <InputAdornment position="end">
+        {query && (
+          <IconButton aria-label="clear" onClick={onSearchClear}>
+            <ClearOutlined />
+          </IconButton>
+        )}
+      </InputAdornment>
+    ),
+    [query],
+  );
 
   useEffect(() => {
     setOpenPopover(!!query);
@@ -63,20 +74,8 @@ export default function Search() {
       <OutlinedInput
         className="Search"
         ref={searchRef}
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchOutlined />
-          </InputAdornment>
-        }
-        endAdornment={
-          <InputAdornment position="end">
-            {query && (
-              <IconButton aria-label="clear" onClick={onSearchClear}>
-                <ClearOutlined />
-              </IconButton>
-            )}
-          </InputAdornment>
-        }
+        startAdornment={InputStartAdornment}
+        endAdornment={InputEndAdornment}
         placeholder="Search..."
         size="small"
         value={query}
