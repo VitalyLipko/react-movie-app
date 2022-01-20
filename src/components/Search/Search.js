@@ -1,5 +1,6 @@
 import {
   ClickAwayListener,
+  Fade,
   IconButton,
   InputAdornment,
   OutlinedInput,
@@ -87,10 +88,15 @@ export default function Search() {
           open={openPopover}
           anchorEl={searchRef.current}
           onClose={onPopoverClose}
+          transition
         >
-          <Paper className="Search-popper-results" elevation={3}>
-            <SearchResults movies={searchResults} />
-          </Paper>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps}>
+              <Paper className="Search-popper-results" elevation={3}>
+                <SearchResults movies={searchResults} />
+              </Paper>
+            </Fade>
+          )}
         </Popper>
       </ClickAwayListener>
     </>

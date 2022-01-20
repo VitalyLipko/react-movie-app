@@ -49,5 +49,11 @@ export default function Favorites() {
     );
   }
 
-  return <MovieList movies={favorites} cssProps={{ p: '16px 0 0 16px' }} />;
+  return (
+    <MovieList
+      movies={favorites}
+      cssProps={{ p: '16px 0 0 16px' }}
+      onlyInitialTransition={false}
+    />
+  );
 }
