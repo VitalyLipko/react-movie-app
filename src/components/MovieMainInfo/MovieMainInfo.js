@@ -4,7 +4,10 @@ import { getVoteBadgeColor } from '../../utils';
 import { FavoriteAction } from '../index';
 import { changeStatus, selectFavoriteIds } from '../../store';
 import { useEffect, useState } from 'react';
-import './MovieMainInfo.css';
+import {
+  MovieMainInfoBackdropContainer,
+  MovieMainInfoContainer,
+} from './MovieMainInfo.styled';
 
 export default function MovieMainInfo(props) {
   const { movie } = props;
@@ -12,9 +15,6 @@ export default function MovieMainInfo(props) {
   const [isFavorite, setFavorite] = useState(false);
   const dispatch = useDispatch();
   const onFavoriteStatusChange = () => dispatch(changeStatus(movie.id));
-  const background = movie.backdrop_path
-    ? `url(https://image.tmdb.org/t/p/original${movie.backdrop_path}) top center`
-    : undefined;
 
   useEffect(() => {
     setFavorite(favoriteIds.includes(movie.id));
@@ -22,30 +22,14 @@ export default function MovieMainInfo(props) {
 
   return (
     <>
-      <Grid item className="Movie-backdrop-container" sx={{ background }} />
-      <Grid
-        container
-        item
-        wrap="nowrap"
-        flexDirection="column"
-        className="Movie-main-info-container"
-      >
-        <Grid
-          container
-          item
-          alignItems="center"
-          wrap="nowrap"
-          className="Movie-main-info-container-header"
-        >
-          <Typography
-            variant="h1"
-            className="Movie-main-info-container-header-title"
-            noWrap
-          >
+      <MovieMainInfoBackdropContainer item movie={movie} />
+      <MovieMainInfoContainer container item wrap="nowrap">
+        <Grid container item alignItems="center" wrap="nowrap">
+          <Typography variant="h1" className="MovieMainInfo-headerTitle" noWrap>
             {movie.title}
           </Typography>
           <Typography
-            className="Movie-main-info-container-header-vote-badge"
+            className="MovieMainInfo-voteBadge"
             variant="h2"
             component="span"
             bgcolor={getVoteBadgeColor(movie.vote_average)}
@@ -57,19 +41,19 @@ export default function MovieMainInfo(props) {
           <Typography
             component="span"
             variant="caption1"
-            className="Movie-main-info-container-header-tagline"
+            className="MovieMainInfo-tagline"
           >
             {movie.tagline}
           </Typography>
         )}
-        <Grid className="Movie-main-info-container-header-favorite-action" item>
+        <Grid className="MovieMainInfo-favoriteAction" item>
           <FavoriteAction
             isButton={true}
             isFavorite={isFavorite}
             onFavoriteStatusChange={onFavoriteStatusChange}
           />
         </Grid>
-      </Grid>
+      </MovieMainInfoContainer>
     </>
   );
 }

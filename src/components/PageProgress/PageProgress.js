@@ -1,19 +1,13 @@
 import { CircularProgress, Grid } from '@mui/material';
 
-import './PageProgress.css';
+import { PageProgressContainer } from './PageProgress.styled';
 
 export default function PageProgress() {
   return (
-    <Grid
-      className="PageProgress"
-      container
-      justifyContent="center"
-      alignItems="center"
-      item
-    >
+    <PageProgressContainer container item>
       <Grid item>
         <CircularProgress />
       </Grid>
-    </Grid>
+    </PageProgressContainer>
   );
 }

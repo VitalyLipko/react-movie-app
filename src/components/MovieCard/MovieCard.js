@@ -2,16 +2,15 @@ import {
   Card,
   CardActionArea,
   CardActions,
-  CardContent,
   CardMedia,
   Tooltip,
   Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import './MovieCard.css';
 import { FavoriteAction } from '../index';
 import { memo } from 'react';
 import isEqual from 'lodash/isEqual';
+import { MovieCardContent } from './MovieCard.styled';
 
 function MovieCard(props) {
   const { movie, onFavoriteStatusChange } = props;
@@ -28,13 +27,13 @@ function MovieCard(props) {
           image={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
           alt={movie.original_title}
         />
-        <CardContent className="MovieCard-content">
+        <MovieCardContent>
           <Tooltip title={movie.title}>
             <Typography component="span" variant="h6" noWrap>
               {movie.title}
             </Typography>
           </Tooltip>
-        </CardContent>
+        </MovieCardContent>
       </CardActionArea>
       <CardActions>
         <FavoriteAction

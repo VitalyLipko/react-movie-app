@@ -1,8 +1,0 @@
-.MuiButton-root.NavButton:not(.active) {
-    color: #ffffff;
-}
-
-.MuiButton-root.active {
-    color: red;
-    background-color: #ffffff;
-}

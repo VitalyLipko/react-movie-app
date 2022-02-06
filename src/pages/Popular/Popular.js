@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Grid, Pagination } from '@mui/material';
+import { Pagination } from '@mui/material';
 import { MovieList } from '../../components';
 import { getPopular } from '../../adapters';
-import './Popular.css';
 import { usePageSearchParam } from '../../hooks';
+import { PopularPaginationContainer } from './Popular.styled';
 
 export default function Popular() {
   const [movies, setMovies] = useState(null);
@@ -31,10 +31,8 @@ export default function Popular() {
 
   return (
     <>
-      {movies && (
-        <MovieList movies={movies} cssProps={{ p: '16px 0 0 16px' }} />
-      )}
-      <Grid className="Popular-pagination-container" item>
+      {movies && <MovieList movies={movies} />}
+      <PopularPaginationContainer item>
         {movies && (
           <Pagination
             count={500}
@@ -42,7 +40,7 @@ export default function Popular() {
             onChange={onPageChange}
           />
         )}
-      </Grid>
+      </PopularPaginationContainer>
     </>
   );
 }

@@ -1,7 +1,6 @@
-import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import './NavButton.css';
 import { forwardRef, useMemo } from 'react';
+import { NavButtonStyled } from './NavButton.styled';
 
 export default function NavButton(props) {
   const { link, label } = props;
@@ -12,9 +11,5 @@ export default function NavButton(props) {
       )),
     [link],
   );
-  return (
-    <Button className="NavButton" component={CustomNavLink}>
-      {label}
-    </Button>
-  );
+  return <NavButtonStyled component={CustomNavLink}>{label}</NavButtonStyled>;
 }

@@ -3,15 +3,13 @@ import { Link } from 'react-router-dom';
 import {
   ListItem,
   ListItemAvatar,
-  ListItemButton,
   ListItemText,
   Tooltip,
   Typography,
 } from '@mui/material';
-import './SearchResultItem.css';
 import { FavoriteAction } from '../index';
-import { getVoteBadgeColor } from '../../utils';
 import isEqual from 'lodash/isEqual';
+import { SearchResultItemInfo } from './SearchResultItem.styled';
 
 function SearchResultItem(props) {
   const { movie, onFavoriteStatusChange } = props;
@@ -39,7 +37,7 @@ function SearchResultItem(props) {
       }
       disablePadding
     >
-      <ListItemButton className="SearchResultItem" component={CustomLinkItem}>
+      <SearchResultItemInfo component={CustomLinkItem} movie={movie}>
         <ListItemAvatar>
           {movie.poster_path && (
             <img
@@ -50,40 +48,38 @@ function SearchResultItem(props) {
             />
           )}
         </ListItemAvatar>
-        <ListItemText className="SearchResultItem-title" disableTypography>
+        <ListItemText className="SearchResultItem-info" disableTypography>
           <Tooltip title={movie.title}>
             <Typography
-              className="SearchResultItem-title-primary"
+              className="SearchResultItem-infoPrimary"
               component="span"
               noWrap
             >
               {movie.title}
             </Typography>
           </Tooltip>
-          <span className="SearchResultItem-title-secondary">
+          <span className="SearchResultItem-infoSecondary">
             <Typography
-              className="SearchResultItem-title-secondary-vote-badge"
+              className="SearchResultItem-infoSecondaryVoteBadge"
               component="span"
               variant="body2"
               align="center"
-              bgcolor={getVoteBadgeColor(movie.vote_average)}
               noWrap
             >
               {movie.vote_average}
             </Typography>
             {!!movie.genres.length && (
               <Typography
-                className="SearchResultItem-title-secondary-genre"
+                className="SearchResultItem-infoSecondaryGenre"
                 component="span"
                 variant="body2"
-                color="secondary"
               >
                 {movie.genres[0].name}
               </Typography>
             )}
           </span>
         </ListItemText>
-      </ListItemButton>
+      </SearchResultItemInfo>
     </ListItem>
   );
 }

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CircularProgress, Grid } from '@mui/material';
 import { MovieList } from '../../components';
-import './Favorites.css';
 import { getMovie } from '../../adapters';
 import { useSelector } from 'react-redux';
 import { selectFavoriteIds } from '../../store';
+import { FavoritesStateContainer } from './Favorites.styled';
 
 export default function Favorites() {
   const favoriteIds = useSelector(selectFavoriteIds);
@@ -33,27 +33,21 @@ export default function Favorites() {
 
   if (!favorites) {
     return (
-      <Grid className="Favorites-progress" container item>
+      <FavoritesStateContainer container item>
         <Grid item>
           <CircularProgress />
         </Grid>
-      </Grid>
+      </FavoritesStateContainer>
     );
   }
 
   if (!favorites.length) {
     return (
-      <Grid className="Favorites-empty" container item>
+      <FavoritesStateContainer container item>
         No favorites
-      </Grid>
+      </FavoritesStateContainer>
     );
   }
 
-  return (
-    <MovieList
-      movies={favorites}
-      cssProps={{ p: '16px 0 0 16px' }}
-      onlyInitialTransition={false}
-    />
-  );
+  return <MovieList movies={favorites} onlyInitialTransition={false} />;
 }

@@ -1,9 +1,9 @@
 import { Divider, Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import './Movie.css';
 import { MovieList, MovieMainInfo } from '../../components';
 import { getMovie, getRecommendations } from '../../adapters';
+import { MovieAdditionalInfo } from './Movie.styled';
 
 function Movie() {
   const params = useParams();
@@ -34,8 +34,7 @@ function Movie() {
     movie && (
       <>
         <MovieMainInfo movie={movie} />
-        <Grid
-          className="Movie-additional-info"
+        <MovieAdditionalInfo
           container
           item
           columns={2}
@@ -47,7 +46,7 @@ function Movie() {
           {!!recommendations?.length && (
             <Grid container item spacing={2} md>
               <Grid
-                className="Movie-additional-info-recommendations-title"
+                className="Movie-additionalInfo-recommendationsTitle"
                 item
                 xs
               >
@@ -57,10 +56,10 @@ function Movie() {
                   </Typography>
                 </Divider>
               </Grid>
-              <MovieList movies={recommendations} />
+              <MovieList movies={recommendations} extraPaddings={false} />
             </Grid>
           )}
-        </Grid>
+        </MovieAdditionalInfo>
       </>
     )
   );

@@ -3,11 +3,11 @@ import { MovieCard } from '../index';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeStatus, selectFavoriteIds } from '../../store';
 import { useCallback, useRef } from 'react';
-import './MovieList.css';
 import { TransitionGroup } from 'react-transition-group';
+import { MovieListContainer } from './MovieList.styled';
 
 export default function MovieList(props) {
-  const { movies, cssProps, onlyInitialTransition = true } = props;
+  const { movies, onlyInitialTransition = true, extraPaddings = true } = props;
   const isInitialTransition = useRef(true);
   const favoriteIds = useSelector(selectFavoriteIds);
   const dispatch = useDispatch();
@@ -27,7 +27,12 @@ export default function MovieList(props) {
   };
 
   return (
-    <Grid className="MovieList" container item spacing={2} sx={cssProps}>
+    <MovieListContainer
+      container
+      item
+      spacing={2}
+      extraPaddings={extraPaddings}
+    >
       <TransitionGroup
         component={null}
         enter={isInitialTransition.current}
@@ -48,6 +53,6 @@ export default function MovieList(props) {
           </Grow>
         ))}
       </TransitionGroup>
-    </Grid>
+    </MovieListContainer>
   );
 }

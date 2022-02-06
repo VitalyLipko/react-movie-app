@@ -3,16 +3,14 @@ import {
   Fade,
   IconButton,
   InputAdornment,
-  OutlinedInput,
   Paper,
-  Popper,
 } from '@mui/material';
 import { ClearOutlined, SearchOutlined } from '@mui/icons-material';
-import './Search.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getSearchResults } from '../../adapters';
 import { useLocation } from 'react-router-dom';
 import { SearchResults } from '../index';
+import { SearchInput, SearchPopper } from './Search.styled';
 
 export default function Search() {
   const [query, setQuery] = useState('');
@@ -71,8 +69,7 @@ export default function Search() {
 
   return (
     <>
-      <OutlinedInput
-        className="Search"
+      <SearchInput
         ref={searchRef}
         startAdornment={InputStartAdornment}
         endAdornment={InputEndAdornment}
@@ -82,8 +79,7 @@ export default function Search() {
         onChange={onQueryChange}
       />
       <ClickAwayListener onClickAway={onPopoverClose}>
-        <Popper
-          className="Search-popper"
+        <SearchPopper
           open={openPopover}
           anchorEl={searchRef.current}
           onClose={onPopoverClose}
@@ -91,12 +87,12 @@ export default function Search() {
         >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps}>
-              <Paper className="Search-popper-results" elevation={3}>
+              <Paper className="Search-popperResults" elevation={3}>
                 <SearchResults movies={searchResults} />
               </Paper>
             </Fade>
           )}
-        </Popper>
+        </SearchPopper>
       </ClickAwayListener>
     </>
   );

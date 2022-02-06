@@ -1,9 +1,12 @@
-import { Box, CircularProgress, List, Typography } from '@mui/material';
+import { CircularProgress, List, Typography } from '@mui/material';
 import { SearchResultItem } from '../index';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectGenres, changeStatus, selectFavoriteIds } from '../../store';
 import { useCallback } from 'react';
-import './SearchResults.css';
+import {
+  SearchResultsEmpty,
+  SearchResultsInProgress,
+} from './SearchResults.styled';
 
 export default function SearchResults(props) {
   const { movies } = props;
@@ -24,9 +27,9 @@ export default function SearchResults(props) {
 
   if (!movies) {
     return (
-      <Box className="Search-results-in-progress">
+      <SearchResultsInProgress>
         <CircularProgress size={20} />
-      </Box>
+      </SearchResultsInProgress>
     );
   }
 
@@ -41,8 +44,8 @@ export default function SearchResults(props) {
       ))}
     </List>
   ) : (
-    <Box className="Search-results-empty">
+    <SearchResultsEmpty>
       <Typography component="span">No results</Typography>
-    </Box>
+    </SearchResultsEmpty>
   );
 }
