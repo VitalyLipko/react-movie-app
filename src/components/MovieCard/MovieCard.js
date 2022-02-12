@@ -8,15 +8,22 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { FavoriteAction } from '../index';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import isEqual from 'lodash/isEqual';
 import { MovieCardContent } from './MovieCard.styled';
+import { useDispatch } from 'react-redux';
+import { changeStatus } from '../../store';
 
 function MovieCard(props) {
-  const { movie, onFavoriteStatusChange } = props;
+  const { movie } = props;
+  const dispatch = useDispatch();
   const ASPECT_RATIO = 4 / 3;
   const size = 243;
   const cssProps = { height: Math.round(ASPECT_RATIO * size), width: size };
+  const onFavoriteStatusChange = useCallback(
+    () => dispatch(changeStatus(movie.id)),
+    [dispatch, movie.id],
+  );
 
   return (
     <Card sx={cssProps}>
@@ -38,7 +45,7 @@ function MovieCard(props) {
       <CardActions>
         <FavoriteAction
           isFavorite={movie.isFavorite}
-          onFavoriteStatusChange={() => onFavoriteStatusChange(movie.id)}
+          onClick={onFavoriteStatusChange}
         />
       </CardActions>
     </Card>

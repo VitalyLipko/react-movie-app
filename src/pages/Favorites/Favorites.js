@@ -15,10 +15,9 @@ export default function Favorites() {
     (async function fetchData() {
       try {
         const res = await Promise.all(
-          favoriteIds.map(async (favoriteId) => {
-            const movie = await getMovie(favoriteId, controller.signal);
-            return { ...movie, isFavorite: true };
-          }),
+          favoriteIds.map(
+            async (favoriteId) => await getMovie(favoriteId, controller.signal),
+          ),
         );
         setFavorites(res);
       } catch (err) {

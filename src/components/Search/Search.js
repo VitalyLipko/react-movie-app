@@ -6,7 +6,7 @@ import {
   Paper,
 } from '@mui/material';
 import { ClearOutlined, SearchOutlined } from '@mui/icons-material';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getSearchResults } from '../../adapters';
 import { useLocation } from 'react-router-dom';
 import { SearchResults } from '../index';
@@ -18,8 +18,11 @@ export default function Search() {
   const [openPopover, setOpenPopover] = useState(false);
   const searchRef = useRef(null);
   const { pathname } = useLocation();
-  const onQueryChange = (event) => setQuery(event.target.value);
-  const onPopoverClose = () => setOpenPopover(false);
+  const onQueryChange = useCallback(
+    (event) => setQuery(event.target.value),
+    [],
+  );
+  const onPopoverClose = useCallback(() => setOpenPopover(false), []);
   const onSearchClear = () => setQuery('');
   const InputStartAdornment = useMemo(
     () => (

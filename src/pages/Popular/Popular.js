@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Pagination } from '@mui/material';
 import { MovieList } from '../../components';
 import { getPopular } from '../../adapters';
@@ -8,10 +8,10 @@ import { PopularPaginationContainer } from './Popular.styled';
 export default function Popular() {
   const [movies, setMovies] = useState(null);
   const [pageSearchParam, setPageSearchParam] = usePageSearchParam();
-
-  function onPageChange(_, page) {
-    setPageSearchParam(page);
-  }
+  const onPageChange = useCallback(
+    (_, page) => setPageSearchParam(page),
+    [setPageSearchParam],
+  );
 
   useEffect(() => {
     const controller = new AbortController();

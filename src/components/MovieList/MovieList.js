@@ -1,8 +1,8 @@
 import { Grid, Grow } from '@mui/material';
 import { MovieCard } from '../index';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeStatus, selectFavoriteIds } from '../../store';
-import { useCallback, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { selectFavoriteIds } from '../../store';
+import { useRef } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import { MovieListContainer } from './MovieList.styled';
 
@@ -10,12 +10,10 @@ export default function MovieList(props) {
   const { movies, onlyInitialTransition = true, extraPaddings = true } = props;
   const isInitialTransition = useRef(true);
   const favoriteIds = useSelector(selectFavoriteIds);
-  const dispatch = useDispatch();
-  const movieMapper = useCallback(
-    (movie) => ({ ...movie, isFavorite: favoriteIds.includes(movie.id) }),
-    [favoriteIds],
-  );
-  const onFavoriteStatusChange = (id) => dispatch(changeStatus(id));
+  const movieMapper = (movie) => ({
+    ...movie,
+    isFavorite: favoriteIds.includes(movie.id),
+  });
   const handleEndTransition = (index) => {
     if (
       onlyInitialTransition &&
@@ -45,10 +43,7 @@ export default function MovieList(props) {
             timeout={index * 80}
           >
             <Grid item>
-              <MovieCard
-                movie={movieMapper(movie)}
-                onFavoriteStatusChange={onFavoriteStatusChange}
-              />
+              <MovieCard movie={movieMapper(movie)} />
             </Grid>
           </Grow>
         ))}

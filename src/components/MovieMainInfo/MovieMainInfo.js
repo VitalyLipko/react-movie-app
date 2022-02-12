@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getVoteBadgeColor } from '../../utils';
 import { FavoriteAction } from '../index';
 import { changeStatus, selectFavoriteIds } from '../../store';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   MovieMainInfoBackdropContainer,
   MovieMainInfoContainer,
@@ -14,7 +14,10 @@ export default function MovieMainInfo(props) {
   const favoriteIds = useSelector(selectFavoriteIds);
   const [isFavorite, setFavorite] = useState(false);
   const dispatch = useDispatch();
-  const onFavoriteStatusChange = () => dispatch(changeStatus(movie.id));
+  const onFavoriteStatusChange = useCallback(
+    () => dispatch(changeStatus(movie.id)),
+    [dispatch, movie.id],
+  );
 
   useEffect(() => {
     setFavorite(favoriteIds.includes(movie.id));
@@ -50,7 +53,7 @@ export default function MovieMainInfo(props) {
           <FavoriteAction
             isButton={true}
             isFavorite={isFavorite}
-            onFavoriteStatusChange={onFavoriteStatusChange}
+            onClick={onFavoriteStatusChange}
           />
         </Grid>
       </MovieMainInfoContainer>

@@ -1,7 +1,7 @@
 import { CircularProgress, List, Typography } from '@mui/material';
 import { SearchResultItem } from '../index';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectGenres, changeStatus, selectFavoriteIds } from '../../store';
+import { useSelector } from 'react-redux';
+import { selectGenres, selectFavoriteIds } from '../../store';
 import { useCallback } from 'react';
 import {
   SearchResultsEmpty,
@@ -10,7 +10,6 @@ import {
 
 export default function SearchResults(props) {
   const { movies } = props;
-  const dispatch = useDispatch();
   const favoriteIds = useSelector(selectFavoriteIds);
   const genres = useSelector(selectGenres);
   const movieMapper = useCallback(
@@ -23,7 +22,6 @@ export default function SearchResults(props) {
     }),
     [favoriteIds, genres],
   );
-  const onFavoriteStatusChange = (id) => dispatch(changeStatus(id));
 
   if (!movies) {
     return (
@@ -36,11 +34,7 @@ export default function SearchResults(props) {
   return movies?.length ? (
     <List>
       {movies.map((movie) => (
-        <SearchResultItem
-          key={movie.id}
-          movie={movieMapper(movie)}
-          onFavoriteStatusChange={onFavoriteStatusChange}
-        />
+        <SearchResultItem key={movie.id} movie={movieMapper(movie)} />
       ))}
     </List>
   ) : (

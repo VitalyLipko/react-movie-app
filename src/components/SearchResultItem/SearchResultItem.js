@@ -10,9 +10,12 @@ import {
 import { FavoriteAction } from '../index';
 import isEqual from 'lodash/isEqual';
 import { SearchResultItemInfo } from './SearchResultItem.styled';
+import { changeStatus } from '../../store';
+import { useDispatch } from 'react-redux';
 
 function SearchResultItem(props) {
-  const { movie, onFavoriteStatusChange } = props;
+  const { movie } = props;
+  const dispatch = useDispatch();
   const CustomLinkItem = useMemo(
     () =>
       forwardRef((listItemProps, ref) => (
@@ -25,18 +28,15 @@ function SearchResultItem(props) {
       )),
     [movie.id],
   );
+  const ListItemSecondaryAction = (
+    <FavoriteAction
+      isFavorite={movie.isFavorite}
+      onClick={() => dispatch(changeStatus(movie.id))}
+    />
+  );
 
   return (
-    <ListItem
-      secondaryAction={
-        <FavoriteAction
-          movie={movie}
-          isFavorite={movie.isFavorite}
-          onFavoriteStatusChange={() => onFavoriteStatusChange(movie.id)}
-        />
-      }
-      disablePadding
-    >
+    <ListItem secondaryAction={ListItemSecondaryAction} disablePadding>
       <SearchResultItemInfo component={CustomLinkItem} movie={movie}>
         <ListItemAvatar>
           {movie.poster_path && (
