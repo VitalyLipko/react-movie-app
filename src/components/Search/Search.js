@@ -17,6 +17,7 @@ export default function Search() {
   const [searchResults, setSearchResults] = useState(null);
   const [openPopover, setOpenPopover] = useState(false);
   const searchRef = useRef(null);
+  const debounceTimerRef = useRef(null);
   const { pathname } = useLocation();
   const onQueryChange = useCallback(
     (event) => setQuery(event.target.value),
@@ -44,27 +45,42 @@ export default function Search() {
     ),
     [query],
   );
+  const getSearchResultsWithDebounce = (query, controller) =>
+    new Promise(
+      (resolve, reject) =>
+        (debounceTimerRef.current = setTimeout(
+          () =>
+            getSearchResults(query, controller.signal)
+              .then((res) => resolve(res))
+              .catch(reject),
+          300,
+        )),
+    );
+  const fetchData = useCallback(async (...args) => {
+    try {
+      const res = await getSearchResultsWithDebounce(...args);
+      setSearchResults(res.results);
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        throw err;
+      }
+    }
+  }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
     setOpenPopover(!!query);
     if (!query) {
       setSearchResults(null);
-      return;
+    } else {
+      fetchData(query, controller);
     }
-    const controller = new AbortController();
-    (async function () {
-      try {
-        const res = await getSearchResults(query, controller.signal);
-        setSearchResults(res.results);
-      } catch (err) {
-        if (err.name !== 'AbortError') {
-          throw err;
-        }
-      }
-    })();
 
-    return () => controller.abort();
-  }, [query]);
+    return () => {
+      controller.abort();
+      clearTimeout(debounceTimerRef.current);
+    };
+  }, [fetchData, query]);
 
   useEffect(() => {
     setQuery('');
