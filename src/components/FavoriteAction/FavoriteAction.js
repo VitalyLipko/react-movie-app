@@ -1,7 +1,8 @@
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { Favorite } from '@mui/icons-material';
+import PropTypes from 'prop-types';
 
-export default function FavoriteAction(props) {
+const FavoriteAction = (props) => {
   const { isFavorite, isButton, onClick } = props;
   const actionColor = isFavorite ? 'error' : undefined;
   const FavoriteIcon = <Favorite fontSize={isButton ? 'inherit' : undefined} />;
@@ -26,4 +27,16 @@ export default function FavoriteAction(props) {
       <Tooltip title={label}>{FavoriteIcon}</Tooltip>
     </IconButton>
   );
-}
+};
+
+FavoriteAction.propTypes = {
+  isFavorite: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  isButton: PropTypes.bool,
+};
+
+FavoriteAction.defaultProps = {
+  isButton: false,
+};
+
+export default FavoriteAction;

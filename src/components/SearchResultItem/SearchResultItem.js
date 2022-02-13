@@ -12,8 +12,9 @@ import isEqual from 'lodash/isEqual';
 import { SearchResultItemInfo } from './SearchResultItem.styled';
 import { changeStatus } from '../../store';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 
-function SearchResultItem(props) {
+const SearchResultItem = (props) => {
   const { movie } = props;
   const dispatch = useDispatch();
   const CustomLinkItem = useMemo(
@@ -82,7 +83,11 @@ function SearchResultItem(props) {
       </SearchResultItemInfo>
     </ListItem>
   );
-}
+};
+
+SearchResultItem.propTypes = {
+  movie: PropTypes.object.isRequired,
+};
 
 const SearchResultItemMemo = memo(SearchResultItem, (pr, cr) =>
   isEqual(pr.movie, cr.movie),

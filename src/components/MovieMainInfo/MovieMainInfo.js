@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { getVoteBadgeColor } from '../../utils';
 import { FavoriteAction } from '../index';
 import { changeStatus, selectFavoriteIds } from '../../store';
@@ -9,7 +10,7 @@ import {
   MovieMainInfoContainer,
 } from './MovieMainInfo.styled';
 
-export default function MovieMainInfo(props) {
+const MovieMainInfo = (props) => {
   const { movie } = props;
   const favoriteIds = useSelector(selectFavoriteIds);
   const [isFavorite, setFavorite] = useState(false);
@@ -51,7 +52,7 @@ export default function MovieMainInfo(props) {
         )}
         <Grid className="MovieMainInfo-favoriteAction" item>
           <FavoriteAction
-            isButton={true}
+            isButton
             isFavorite={isFavorite}
             onClick={onFavoriteStatusChange}
           />
@@ -59,4 +60,10 @@ export default function MovieMainInfo(props) {
       </MovieMainInfoContainer>
     </>
   );
-}
+};
+
+MovieMainInfo.propTypes = {
+  movie: PropTypes.object.isRequired,
+};
+
+export default MovieMainInfo;

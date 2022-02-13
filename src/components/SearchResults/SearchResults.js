@@ -1,4 +1,5 @@
 import { CircularProgress, List, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import { SearchResultItem } from '../index';
 import { useSelector } from 'react-redux';
 import { selectGenres, selectFavoriteIds } from '../../store';
@@ -8,7 +9,7 @@ import {
   SearchResultsInProgress,
 } from './SearchResults.styled';
 
-export default function SearchResults(props) {
+const SearchResults = (props) => {
   const { movies } = props;
   const favoriteIds = useSelector(selectFavoriteIds);
   const genres = useSelector(selectGenres);
@@ -42,4 +43,10 @@ export default function SearchResults(props) {
       <Typography component="span">No results</Typography>
     </SearchResultsEmpty>
   );
-}
+};
+
+SearchResults.propTypes = {
+  movies: PropTypes.arrayOf(PropTypes.object.isRequired),
+};
+
+export default SearchResults;

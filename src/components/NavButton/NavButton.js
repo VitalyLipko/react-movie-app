@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { forwardRef, useMemo } from 'react';
 import { NavButtonStyled } from './NavButton.styled';
+import PropTypes from 'prop-types';
 
-export default function NavButton(props) {
-  const { link, label } = props;
+const NavButton = (props) => {
+  const { link, children } = props;
   const CustomNavLink = useMemo(
     () =>
       forwardRef((navLinkProps, ref) => (
@@ -11,5 +12,14 @@ export default function NavButton(props) {
       )),
     [link],
   );
-  return <NavButtonStyled component={CustomNavLink}>{label}</NavButtonStyled>;
-}
+  return (
+    <NavButtonStyled component={CustomNavLink}>{children}</NavButtonStyled>
+  );
+};
+
+NavButton.propTypes = {
+  link: PropTypes.string.isRequired,
+  children: PropTypes.node,
+};
+
+export default NavButton;

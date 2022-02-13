@@ -13,10 +13,10 @@ export default function Layout() {
           <nav>
             <LayoutNavContainer>
               <li>
-                <NavButton link="" label="Popular" />
+                <NavButton link="">Popular</NavButton>
               </li>
               <li>
-                <NavButton link="favorites" label="Favorites" />
+                <NavButton link="favorites">Favorites</NavButton>
               </li>
             </LayoutNavContainer>
           </nav>

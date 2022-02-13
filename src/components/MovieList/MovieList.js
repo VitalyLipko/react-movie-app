@@ -5,9 +5,10 @@ import { selectFavoriteIds } from '../../store';
 import { useRef } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import { MovieListContainer } from './MovieList.styled';
+import PropTypes from 'prop-types';
 
-export default function MovieList(props) {
-  const { movies, onlyInitialTransition = true, extraPaddings = true } = props;
+const MovieList = (props) => {
+  const { movies, onlyInitialTransition, extraPaddings } = props;
   const isInitialTransition = useRef(true);
   const favoriteIds = useSelector(selectFavoriteIds);
   const movieMapper = (movie) => ({
@@ -50,4 +51,17 @@ export default function MovieList(props) {
       </TransitionGroup>
     </MovieListContainer>
   );
-}
+};
+
+MovieList.propTypes = {
+  movies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onlyInitialTransition: PropTypes.bool,
+  extraPaddings: PropTypes.bool,
+};
+
+MovieList.defaultProps = {
+  onlyInitialTransition: true,
+  extraPaddings: true,
+};
+
+export default MovieList;

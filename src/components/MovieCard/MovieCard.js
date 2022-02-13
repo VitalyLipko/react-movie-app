@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { FavoriteAction } from '../index';
 import { memo, useCallback } from 'react';
 import isEqual from 'lodash/isEqual';
@@ -14,7 +15,7 @@ import { MovieCardContent } from './MovieCard.styled';
 import { useDispatch } from 'react-redux';
 import { changeStatus } from '../../store';
 
-function MovieCard(props) {
+const MovieCard = (props) => {
   const { movie } = props;
   const dispatch = useDispatch();
   const ASPECT_RATIO = 4 / 3;
@@ -50,7 +51,11 @@ function MovieCard(props) {
       </CardActions>
     </Card>
   );
-}
+};
+
+MovieCard.propTypes = {
+  movie: PropTypes.object.isRequired,
+};
 
 const MovieCardMemo = memo(MovieCard, (pr, cr) => isEqual(pr.movie, cr.movie));
 
